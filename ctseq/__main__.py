@@ -136,7 +136,7 @@ def main():
     parser_analyze.add_argument('-n','--nameRun', help='number of reads needed to be counted as a unique molecule (required)', required=True)
     parser_analyze.add_argument('--cisCG', help='cis-CG threshold to determine if a molecule is methylated (default=0.75)', default=0.75, type=float)
     parser_analyze.add_argument('--moleculeThreshold', help='number of reads needed to be counted as a unique molecule (default=5)', default=5, type=int)
-    parser_callmethylation.add_argument('-g','--minNonG', help='specify the minimum number of non-g values that must be in the UMI (default=0, recommend=2)', default=0, type=int)
+    parser_analyze.add_argument('-g','--minNonG', help='specify the minimum number of non-g values that must be in the UMI (default=0, recommend=2)', default=0, type=int)
     parser_analyze.set_defaults(func=run_subcommand)
 
 
