@@ -15,7 +15,7 @@ class Locus:
       self.totalMolecules=0
       self.totalReads=0
 
-def callMethylation(fileName,myBlacklistUMI,myCisCGcutoff,myMoleculeThreshold,umiLength,minNonG=0):
+def callMethylation(fileName,myBlacklistUMI,myCisCGcutoff,myMoleculeThreshold,minNonG):
     locusDict={} # fragName:locusObject
     sampleName=fileName.split('_')[0]
 
@@ -29,7 +29,7 @@ def callMethylation(fileName,myBlacklistUMI,myCisCGcutoff,myMoleculeThreshold,um
                 umi=line[2]
                 zString=line[3]
 
-                if zString!='NA' and umi != myBlacklistUMI and umiLength - umi.count("G") >= minNonG:
+                if zString!='NA' and umi != myBlacklistUMI and len(umi) - umi.count("G") >= minNonG:
                     try:
                         locus=line[1]
                         methRatio=float(line[6])
@@ -295,6 +295,7 @@ def run(args):
     refDir=args.refDir
     fileDir=args.dir
     nameRun=args.nameRun
+    minNonG=int(args.minNonG)
     processes=int(args.processes)
     cisCGcutoff=float(args.cisCG)
     moleculeThreshold=int(args.moleculeThreshold)
@@ -373,7 +374,7 @@ def run(args):
         # entering pool to analyze the methylation
         print('entering pool to analyze methylation for sample',sampleName,utilities.getDate())
         p = Pool(processes)
-        callMethylation_multipleArgs=partial(callMethylation, myBlacklistUMI=blacklistUMI,myCisCGcutoff=cisCGcutoff,myMoleculeThreshold=moleculeThreshold) # see 'Example 2' - http://python.omics.wiki/multiprocessing_map/multiprocessing_partial_function_multiple_arguments, this is to use 1 dynamic fxn arguments and these 2 static arguments for multiprocessing
+        callMethylation_multipleArgs=partial(callMethylation, myBlacklistUMI=blacklistUMI,myCisCGcutoff=cisCGcutoff,myMoleculeThreshold=moleculeThreshold,minNonG=minNonG) # see 'Example 2' - http://python.omics.wiki/multiprocessing_map/multiprocessing_partial_function_multiple_arguments, this is to use 1 dynamic fxn arguments and these 2 static arguments for multiprocessing
         methylResults=p.map(callMethylation_multipleArgs, tempFiles)
         print('exiting pool',utilities.getDate())
 
