@@ -15,7 +15,7 @@ class Locus:
       self.totalMolecules=0
       self.totalReads=0
 
-def callMethylation(fileName,myBlacklistUMI,myCisCGcutoff,myMoleculeThreshold):
+def callMethylation(fileName,myBlacklistUMI,myCisCGcutoff,myMoleculeThreshold,umiLength,minNonG=0):
     locusDict={} # fragName:locusObject
     sampleName=fileName.split('_')[0]
 
@@ -29,7 +29,7 @@ def callMethylation(fileName,myBlacklistUMI,myCisCGcutoff,myMoleculeThreshold):
                 umi=line[2]
                 zString=line[3]
 
-                if zString!='NA' and umi != myBlacklistUMI:
+                if zString!='NA' and umi != myBlacklistUMI and umiLength - umi.count("G") >= minNonG:
                     try:
                         locus=line[1]
                         methRatio=float(line[6])
