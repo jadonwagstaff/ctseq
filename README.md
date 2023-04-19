@@ -4,7 +4,7 @@
 ctseq is a pipeline to analyze methylation patch PCR data.
 
 ### Current version:
- - v0.0.3.1
+ - v0.0.4
 
 ### Requirements
 
@@ -35,17 +35,17 @@ ctseq is a pipeline to analyze methylation patch PCR data.
 ### Docker
 
 #### Option 1: Download already-built container from DockerHub
-Replace 'v0.0.1' with the version of ctseq you want to clone and build. The latest version number is found at the top of this README (a list of all the versions you can download are listed [here](https://hub.docker.com/r/ryanhmiller/ctseq/tags)).
+Replace 'v0.0.4' with the version of ctseq you want to clone and build. The latest version number is found at the top of this README (a list of all the versions you can download are listed [here](https://hub.docker.com/r/jadonwagstaff/ctseq/tags)).
 ```
 # download docker file
-docker pull ryanhmiller/ctseq:v0.0.1
+docker pull jadonwagstaff/ctseq:v0.0.4
 ```
 or...
 
 #### Option 2: Build container yourself locally
 Get Dockerfile
 ```
-git clone https://github.com/ryanhmiller/ctseq
+git clone https://github.com/jadonwagstaff/ctseq
 ```
 
 Move into ```ctseq``` directory
@@ -64,8 +64,8 @@ Run container
 # Command to run container if you built the docker container yourself. Use the container name you specified in place of 'ctseqdocker'
 docker run -it ctseqdocker
 
-# Command to run if you pulled the Docker container from DockerHub, using the correct version number in place of 'v0.0.1'
-docker run -it -v /users/ryan/data/methylationData/17879R/:/myOutputDir ryanhmiller/ctseq:v0.0.1
+# Command to run if you pulled the Docker container from DockerHub, using the correct version number in place of 'v0.0.4'
+docker run -it -v /users/ryan/data/methylationData/17879R/:/myOutputDir jadonwagstaff/ctseq:v0.0.4
 ```
 
 
@@ -75,7 +75,7 @@ Run Docker container interactively with access to an outside directory.
 docker run -it -v /users/ryan/data/methylationData/17879R/:/myOutputDir ctseqdocker
 
 # Command if you pulled container from DockerHub. Substitute correct version number in place of 'v0.0.1'
-docker run -it -v /users/ryan/data/methylationData/17879R/:/myOutputDir ryanhmiller/ctseq:v0.0.1
+docker run -it -v /users/ryan/data/methylationData/17879R/:/myOutputDir jadonwagstaff/ctseq:v0.0.4
 ```
 '/users/ryan/data/methylationData/17879R/' represents the directory you want visible to your Docker container and it will be visible as '/myOutputDir' when you are in the container. You are more than welcome to put your fastq and reference (.fa) files in the same directory so you only have to mount one directory to your Docker container
 
@@ -92,9 +92,9 @@ exit
 If you want to use a Docker container of ctseq but you do not have privileges to run Docker on your system (e.g. a high performance compute environments at a university, etc) you can run the Docker container of ctseq in Singularity
 
 
-Download Docker image from cloud and make Singularity container for it ('.sif' file). Replace 'ctseqsingularity.sif' with whatever you want your Singularity container file to be called (with extension '.sif') and replace 'v0.0.1' with the version of ctseq you want to clone and build. The latest version number is found at the top of this README (a list of all the versions you can download are listed [here](https://hub.docker.com/r/ryanhmiller/ctseq/tags)).
+Download Docker image from cloud and make Singularity container for it ('.sif' file). Replace 'ctseqsingularity.sif' with whatever you want your Singularity container file to be called (with extension '.sif') and replace 'v0.0.4' with the version of ctseq you want to clone and build. The latest version number is found at the top of this README (a list of all the versions you can download are listed [here](https://hub.docker.com/r/jadonwagstaff/ctseq/tags)).
 ```
-singularity build ctseqsingularity.sif docker://ryanhmiller/ctseq:v0.0.1
+singularity build ctseqsingularity.sif docker://jadonwagstaff/ctseq:v0.0.4
 ```
 
 Run ctseq in Singularity. Your whole file system will be visible to Singularity so you won't need to mount any directories, etc.
@@ -104,6 +104,7 @@ singularity exec ctseqtest.sif ctseq analyze \
 	--dir /users/ryan/data/methylationData/17879R \
 	--umiType separate \
 	--umiLength 12 \
+	--minNonG 2 \
 	--forwardExt R1_001.fastq.gz \
 	--reverseExt R3_001.fastq.gz \
 	--umiExt R2_001.fastq.gz \
@@ -239,6 +240,8 @@ Options:
 --cisCG 			(optional) cis-CG threshold to determine if a molecule is methylated (default=0.75)
 
 --moleculeThreshold (optional)	number of reads needed to be counted as a unique molecule (default=5)
+
+--minNonG (optional) specify the minimum number of non-g values that must be in the UMI (default=0, recommend=2)
 ```
 Example usage:
 ```
@@ -247,6 +250,7 @@ ctseq analyze \
 	--dir  /users/ryan/data/methylationData/17879R \
 	--umiType separate \
 	--umiLength 12 \
+	--minNonG 2 \
 	--forwardExt R1_001.fastq.gz \
 	--reverseExt R3_001.fastq.gz \
 	--umiExt R2_001.fastq.gz \

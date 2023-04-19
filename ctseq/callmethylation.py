@@ -29,7 +29,7 @@ def callMethylation(fileName,myBlacklistUMI,myCisCGcutoff,myMoleculeThreshold,mi
                 umi=line[2]
                 zString=line[3]
 
-                if zString!='NA' and umi != myBlacklistUMI and len(umi) - umi.count("G") >= minNonG:
+                if zString!='NA' and umi.count("N") == 0 and umi != myBlacklistUMI and len(umi) - umi.count("G") >= minNonG:
                     try:
                         locus=line[1]
                         methRatio=float(line[6])
